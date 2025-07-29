@@ -31,7 +31,9 @@ vim.opt.showtabline = 2 -- tabline option: always
 vim.g.mapleader = ' ' -- set space as leader key
 
 local opts = { noremap = true }
+
 vim.keymap.set('n', '<leader>r', '<cmd>source<cr>', opts) -- reload config
+vim.keymap.set('t', '<esc>', '<c-\\><c-n>', opts) -- esc in terminal mode
 
 -- highlight when yanking text
 vim.api.nvim_create_autocmd("TextYankPost", {
