@@ -73,4 +73,20 @@ vim.opt.rtp:prepend(lazypath)
 
 local lazy = require('lazy')
 
-lazy.setup({ })
+lazy.setup({ 
+    { 
+        'vague2k/vague.nvim', -- vague colorscheme
+        tag = 'v1.4.1',
+    },
+})
+
+-- setup colorscheme 
+local vague = require('vague');
+
+vague.setup({
+    style = {
+        strings = 'none',
+    },
+})
+ 
+vim.cmd.colorscheme('vague')

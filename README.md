@@ -120,7 +120,7 @@ vim.keymap.set('t', '<esc>', '<c-\\><c-n>', opts) -- esc in terminal mode
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function ()
         vim.highlight.on_yank({ higroup = 'Visual' })
-    end,
+    end
 })
 
 local CWD = '%:p:h' -- set neovim cwd string as a constant
@@ -130,7 +130,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
     pattern = '*',
     callback = function ()
         vim.api.nvim_set_current_dir(vim.fn.expand(CWD)) 
-    end,
+    end
 })
 ```
 
@@ -157,4 +157,27 @@ vim.opt.rtp:prepend(lazypath)
 local lazy = require('lazy')
 
 lazy.setup({ })
+```
+
+Cool, but nothing happened, to check if our current setup is working, let's add a plugin, let's start with a colorscheme:
+
+```lua
+-- plugin versions are locked, if you want updates, remove or update the 'branch', 'tag', or 'commit' fields
+lazy.setup({ 
+    { 
+        'vague2k/vague.nvim', -- vague colorscheme
+        tag = 'v1.4.1',
+    },
+})
+
+-- setup colorscheme 
+local vague = require('vague');
+
+vague.setup({
+    style = {
+        strings = 'none',
+    },
+})
+ 
+vim.cmd.colorscheme('vague')
 ```
