@@ -272,3 +272,104 @@ treesitter.setup({
     ensure_installed = { 'c', 'cpp' }, -- auto install parsers for c and c++
 })
 ```
+
+After that, we setup formatting with null-ls:
+
+```lua
+lazy.setup({ 
+    -- ...
+    {
+        'nvimtools/none-ls.nvim', -- linting and formatting
+        commit = '3ce66bc',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            commit = 'b9fd522',
+        },
+    },
+})
+
+-- ...
+
+-- formatting
+local null_ls = require('null-ls')
+
+null_ls.setup({
+    sources = {
+        null_ls.builtins.formatting.clang_format,
+    },
+    on_attach = function (client, bufnr) 
+        vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = bufnr,
+            callback = function ()
+                vim.lsp.buf.format()
+            end
+        })
+    end
+})
+```
+
+And finally we set some fuzzy finders and pickers:
+
+```lua
+lazy.setup({ 
+    -- ...
+    {
+        'nvim-telescope/telescope.nvim',
+        commit = 'b4da76b',
+        dependencies = {
+            {
+                'nvim-lua/plenary.nvim',
+                commit = 'b9fd522',
+            },
+            {
+                'nvim-telescope/telescope-file-browser.nvim',
+                commit = '7bf55ed',
+            },
+        },
+    },
+})
+
+-- ...
+
+-- setup fuzzy finding and pickers
+local telescope = require('telescope')
+local telescope_themes = require('telescope.themes')
+local telescope_actions = require('telescope.actions')
+local telescope_builtin = require('telescope.builtin')
+
+telescope.setup({
+    defaults = telescope_themes.get_ivy({
+        mappings = {
+            i = {
+                ['<c-j>'] = telescope_actions.move_selection_next,
+                ['<c-k>'] = telescope_actions.move_selection_previous,
+            },
+        },
+    }),
+    pickers = {
+        find_files = {
+            find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' }
+        },
+        live_grep = {
+            additional_args = { '--iglob', '!.git', '--hidden' }
+        },
+    },
+    extensions = {
+        file_browser = {
+            initial_mode = 'normal',
+            cwd_to_path = true,
+            hijack_netrw = true,
+            no_ignore = true,
+            hidden = true,
+            grouped = true,
+            path = CWD, 
+        }
+    }
+})
+
+telescope.load_extension('file_browser');
+
+vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, opts)
+vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, opts)
+vim.keymap.set('n', '<leader>fe', telescope.extensions.file_browser.file_browser, opts)
+```
