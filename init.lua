@@ -86,6 +86,10 @@ lazy.setup({
         'Saghen/blink.cmp', -- lsp completion engine 
         tag = 'v1.6.0',
     },
+    {
+        'nvim-treesitter/nvim-treesitter', -- syntax highlighting
+        tag = 'v0.10.0',
+    },
 })
 
 -- setup colorscheme 
@@ -149,4 +153,11 @@ vim.lsp.enable('clangd')
 -- enable inline diagnostics
 vim.diagnostic.config({
     virtual_text = {},
+})
+
+-- syntax highlighting
+local treesitter = require('nvim-treesitter.configs')
+
+treesitter.setup({
+    ensure_installed = { 'c', 'cpp' }, -- auto install parsers for c and c++
 })

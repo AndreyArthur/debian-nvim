@@ -47,7 +47,7 @@ sudo apt update
 
 Install the tools we'll need for our neovim setup:
 
-```
+```sh
 sudo apt install ripgrep clang clangd clang-format
 ```
 
@@ -249,5 +249,26 @@ vim.lsp.enable('clangd')
 -- enable inline diagnostics
 vim.diagnostic.config({
     virtual_text = {},
+})
+```
+
+Then, we setup syntax highlighting:
+
+```lua
+lazy.setup({ 
+    -- ...
+    { 
+        'nvim-treesitter/nvim-treesitter', -- syntax highlighting
+        tag = 'v0.10.0',
+    },
+})
+
+-- ...
+
+-- syntax highlighting
+local treesitter = require('nvim-treesitter.configs')
+
+treesitter.setup({
+    ensure_installed = { 'c', 'cpp' }, -- auto install parsers for c and c++
 })
 ```
