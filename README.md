@@ -181,3 +181,73 @@ vague.setup({
  
 vim.cmd.colorscheme('vague')
 ```
+
+Ok! We can already add and use plugins, so, let's configure the lsp and completions:
+
+```lua
+lazy.setup({ 
+    -- ...
+    { 
+        'neovim/nvim-lspconfig', -- lsp prebuilt configurations
+        tag = 'v2.4.0',
+    }, 
+    {
+        'Saghen/blink.cmp', -- lsp completion engine 
+        tag = 'v1.6.0',
+    },
+})
+
+-- ...
+
+-- setup lsp and completions
+local blink = require('blink.cmp')
+
+blink.setup({
+    term = { enabled = false }, -- not try to complete in terminal mode
+    keymap = { -- setup your prefered keymaps
+        preset = 'none',
+        ['<c-k>'] = { 'select_prev' },
+        ['<c-j>'] = { 'select_next' },
+        ['<c-space>'] = { 'show' },
+        ['<tab>'] = { 'accept', 'fallback' },
+    },
+    completion = {
+        documentation = { -- show documentation for selected item if possible
+            auto_show = true,
+            auto_show_delay_ms = 0
+        },
+        menu = {
+            draw = {
+                columns = { -- draw the completion menu
+                    { 'label', 'label_description', gap = 1 },
+                    { 'kind' }
+                }
+            }
+        }
+    },
+    fuzzy = { -- use lua implementation instead of the rust one
+        implementation = 'lua'
+    },
+})
+
+local blink_capabilities = blink.get_lsp_capabilities() -- get completion capabilities
+blink_capabilities.textDocument.completion.completionItem.snippetSupport = false -- disable snippets
+
+-- merge completion capabilities with default capabilities
+local capabilities = vim.tbl_deep_extend(
+    'force',
+    vim.lsp.protocol.make_client_capabilities(),
+    blink_capabilities
+)
+
+--- setup and enable clangd lsp
+vim.lsp.config('clangd', {
+    capabilities = capabilities,
+})
+vim.lsp.enable('clangd') 
+
+-- enable inline diagnostics
+vim.diagnostic.config({
+    virtual_text = {},
+})
+```
