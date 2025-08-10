@@ -38,7 +38,7 @@ vim.keymap.set('n', '<leader>tt', '<cmd>terminal<cr>', opts) -- enter in termina
 vim.keymap.set('t', '<esc>', '<c-\\><c-n>', opts) -- esc in terminal mode
 
 -- highlight when yanking text
-vim.api.nvim_create_autocmd("TextYankPost", {
+vim.api.nvim_create_autocmd('TextYankPost', {
     callback = function ()
         vim.highlight.on_yank({ higroup = 'Visual' })
     end,
@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-    local out = vim.fn.system({ 'git', 'clone', '--filter=blob:none', '--branch=11.17.1', lazyrepo, lazypath }) -- this version is locked use 'stable' if you want updates
+    local out = vim.fn.system({ 'git', 'clone', '--filter=blob:none', '--branch=v11.17.1', lazyrepo, lazypath }) -- this version is locked use 'stable' if you want updates
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { 'Failed to clone lazy.nvim:\n', 'ErrorMsg' },
@@ -117,14 +117,14 @@ lazy.setup({
 })
 
 -- setup colorscheme 
-local vague = require('vague');
+local vague = require('vague')
 
 vague.setup({
     style = {
         strings = 'none',
     },
 })
- 
+
 vim.cmd.colorscheme('vague')
 
 -- setup lsp and completions
@@ -142,19 +142,19 @@ blink.setup({
     completion = {
         documentation = { -- show documentation for selected item if possible
             auto_show = true,
-            auto_show_delay_ms = 0
+            auto_show_delay_ms = 0,
         },
         menu = {
             draw = {
                 columns = { -- draw the completion menu
                     { 'label', 'label_description', gap = 1 },
-                    { 'kind' }
-                }
-            }
-        }
+                    { 'kind' },
+                },
+            },
+        },
     },
     fuzzy = { -- use lua implementation instead of the rust one
-        implementation = 'lua'
+        implementation = 'lua',
     },
 })
 
@@ -173,6 +173,8 @@ vim.lsp.config('clangd', {
     capabilities = capabilities,
 })
 vim.lsp.enable('clangd') 
+
+vim.keymap.set('n', 'grd', vim.lsp.buf.definition, opts)
 
 -- enable inline diagnostics
 vim.diagnostic.config({
@@ -198,9 +200,9 @@ null_ls.setup({
             buffer = bufnr,
             callback = function ()
                 vim.lsp.buf.format()
-            end
+            end,
         })
-    end
+    end,
 })
 
 -- fuzzy finding and pickers ---
@@ -220,10 +222,10 @@ telescope.setup({
     }),
     pickers = {
         find_files = {
-            find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' }
+            find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' },
         },
         live_grep = {
-            additional_args = { '--iglob', '!.git', '--hidden' }
+            additional_args = { '--iglob', '!.git', '--hidden' },
         },
     },
     extensions = {
@@ -235,11 +237,11 @@ telescope.setup({
             hidden = true,
             grouped = true,
             path = CWD, 
-        }
-    }
+        },
+    },
 })
 
-telescope.load_extension('file_browser');
+telescope.load_extension('file_browser')
 
 vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, opts)
 vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, opts)
