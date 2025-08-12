@@ -11,6 +11,8 @@ sudo apt update
 sudo apt upgrade
 ```
 
+## If you're in Debian 13, you can [skip these steps](#in-debian-13-you-can-follow-from-here)
+
 _Little tip: if you're using gnome and want to disable the alert sound, you can run this as root:_
 
 ```sh
@@ -52,6 +54,8 @@ Update the database:
 ```sh
 sudo apt update
 ```
+
+## In debian 13 you can follow from here
 
 Install the tools we'll need for our neovim setup:
 
