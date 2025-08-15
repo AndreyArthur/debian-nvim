@@ -83,3 +83,25 @@ git clone https://github.com/AndreyArthur/debian-nvim nvim
 ```
 
 Now you're ready to use neovim.
+
+## Tips and Tricks
+
+- `grn` renames
+- `grr` find references
+- `gri` go to implementation
+- `gra` code actions
+- `grd` go to definition
+- `K` hover documention
+- `<c-s>` signature help
+- `[d` and `]d` go to next and previous diagnostics
+- `<c-w><c-d>` show diagnostic under cursor
+
+- In completions
+- `<c-k>` and `<c-j>` to switch betwen suggestions
+- `<c-space>` to invoke the completion box
+- `<tab>` to accept completion
+
+- Pickers and Finders
+- `<leader>ff` fuzzy find files
+- `<leader>fg` grep between files
+- `<leader>fe` opens the file explorer
