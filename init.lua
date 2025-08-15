@@ -1,35 +1,42 @@
+-- line numbers --
 vim.opt.number = true -- allow line numbers
 vim.opt.relativenumber = true -- allow relative line numbers
 
+--- temporary files --
 vim.opt.swapfile = false -- don't save swap files
 vim.opt.backup = false -- don't backup any written files
 vim.opt.writebackup = false -- don't backup current file
 vim.opt.hidden = false -- don't allow to exit buffer without saving
 vim.opt.undofile = true -- persist undo history
 
+-- splits --
 vim.opt.splitbelow = true -- always create new window below when horizontal splitting
 vim.opt.splitright = true -- always create new window right when vertical splitting
 
+-- tabs and spaces --
 vim.opt.expandtab = true -- use tabs as spaces
 vim.opt.tabstop = 4 -- show each tab as 4 spaces
 vim.opt.softtabstop = 4 -- treat every 4 spaces as a tab
 
+-- identation --
 vim.opt.shiftwidth = 0 -- set characters for each indent level as equal to the tabstop value
 vim.opt.autoindent = true -- start new lines with same indentation as the above line
 vim.opt.smartindent = true -- automatically detect new indentation levels inside delimiters
 vim.opt.wrap = false -- disable line wrapping (breaking)
 
+-- columns and lines --
 vim.opt.signcolumn = 'yes' -- always show the signcolumn to avoid flickering
 vim.opt.cursorline = true -- highlight current cursor line
 vim.opt.colorcolumn = { 81, 121 } -- columns to indicate line width
 vim.opt.background = 'dark' -- color option
 
+-- misc --
 vim.opt.fileencoding = 'utf-8' -- set default encoding
 vim.opt.mouse = '' -- disable mouse
 vim.opt.showtabline = 2 -- always show tabline
-
 vim.opt.winborder = 'rounded' -- set all borders to be rounded
 
+-- mappings --
 vim.g.mapleader = ' ' -- set space as leader key
 
 local opts = { noremap = true } -- set the default keymap options to no remap
@@ -101,7 +108,7 @@ lazy.setup({
         },
     },
     {
-        'nvim-telescope/telescope.nvim',
+        'nvim-telescope/telescope.nvim', -- finders and pickers
         commit = 'b4da76b',
         dependencies = {
             {
@@ -168,17 +175,18 @@ local capabilities = vim.tbl_deep_extend(
     blink_capabilities
 )
 
---- setup and enable clangd lsp
+--- setup and enable clangd lsp for c and c++
 vim.lsp.config('clangd', {
     capabilities = capabilities,
 })
 vim.lsp.enable('clangd') 
 
+-- map go to definition
 vim.keymap.set('n', 'grd', vim.lsp.buf.definition, opts)
 
 -- enable inline diagnostics
 vim.diagnostic.config({
-    virtual_text = {},
+    virtual_text = true,
 })
 
 -- syntax highlighting
@@ -213,14 +221,14 @@ local telescope_builtin = require('telescope.builtin')
 
 telescope.setup({
     defaults = telescope_themes.get_ivy({
-        mappings = {
-            i = {
+        mappings = { -- setup up and down custom keymaps
+            i = { 
                 ['<c-j>'] = telescope_actions.move_selection_next,
                 ['<c-k>'] = telescope_actions.move_selection_previous,
             },
         },
     }),
-    pickers = {
+    pickers = { -- setup pickers to ignore certain files
         find_files = {
             find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' },
         },
@@ -228,7 +236,7 @@ telescope.setup({
             additional_args = { '--iglob', '!.git', '--hidden' },
         },
     },
-    extensions = {
+    extensions = { -- setup file browser configs
         file_browser = {
             initial_mode = 'normal',
             cwd_to_path = true,
@@ -243,6 +251,7 @@ telescope.setup({
 
 telescope.load_extension('file_browser')
 
+-- setup keymaps for each picker
 vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, opts)
 vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, opts)
 vim.keymap.set('n', '<leader>fe', telescope.extensions.file_browser.file_browser, opts)
