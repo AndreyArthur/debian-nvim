@@ -11,6 +11,12 @@ sudo apt update
 sudo apt upgrade
 ```
 
+And install basic tools:
+
+```sh
+sudo apt install build-essential cmake wget curl git vim bash-completion
+```
+
 ## If you're in Debian 13, you can [skip these steps](#in-debian-13-you-can-follow-from-here)
 
 _Little tip: if you're using gnome and want to disable the alert sound, you can run this as root:_
@@ -20,12 +26,6 @@ echo "" > /usr/share/sounds/gnome/default/alerts/click.ogg
 ```
 
 _This will turn the default alert sound (Click) into an empty file, so it will not play when triggered._
-
-And install basic tools:
-
-```sh
-sudo apt install build-essential cmake wget curl git vim bash-completion
-```
 
 Add llvm apt public key:
 
